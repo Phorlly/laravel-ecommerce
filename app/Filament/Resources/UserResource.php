@@ -3,6 +3,7 @@
 namespace App\Filament\Resources;
 
 use App\Filament\Resources\UserResource\Pages;
+use App\Filament\Resources\UserResource\RelationManagers\OrdersRelationManager;
 use App\Models\User;
 use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\TextInput;
@@ -24,6 +25,11 @@ class UserResource extends Resource
     protected static ?string $model = User::class;
 
     protected static ?string $navigationIcon = 'heroicon-o-user-group';
+
+
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?int $navigationSort = 1;
 
     public static function form(Form $form): Form
     {
@@ -56,18 +62,29 @@ class UserResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                    ->rowIndex(),
                 TextColumn::make('name')->searchable()->sortable(),
-                TextColumn::make('email')->searchable()->sortable(),
+                TextColumn::make('email')
+                    ->icon('heroicon-m-envelope')
+                    ->searchable()->sortable(),
                 TextColumn::make('email_verified_at')->dateTime('d M Y, H:i')->sortable(),
-                TextColumn::make('created_at')->dateTime('d M Y, H:i')->sortable(),
+                TextColumn::make('created_at')
+                    ->dateTime('d M Y H:i:s')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
+                TextColumn::make('updated_at')
+                    ->dateTime('d M Y H:i:s')
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
             ])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make(),
                     ViewAction::make(),
+                    EditAction::make(),
                     DeleteAction::make(),
                 ]),
             ])
@@ -81,8 +98,13 @@ class UserResource extends Resource
     public static function getRelations(): array
     {
         return [
-            //
+            OrdersRelationManager::class,
         ];
+    }
+
+    public static function getGloballySearchableAttributes(): array
+    {
+        return [ 'name', 'email'];
     }
 
     public static function getPages(): array

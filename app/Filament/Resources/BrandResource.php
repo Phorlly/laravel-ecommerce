@@ -29,6 +29,10 @@ class BrandResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-computer-desktop';
 
+    protected static ?string $recordTitleAttribute = 'name';
+
+    protected static ?int $navigationSort = 2;
+
     public static function form(Form $form): Form
     {
         return $form
@@ -40,15 +44,12 @@ class BrandResource extends Resource
                                 ->required()
                                 ->maxLength(255)
                                 ->live(onBlur: true)
-                                ->afterStateUpdated(fn(string $operation, $state, Set $set) =>
-                                    $operation
-                                    ? $set('slug', Str::slug($state))
-                                    : null),
+                                ->afterStateUpdated(fn($state, Set $set) => $set('slug', Str::slug($state))),
 
                             TextInput::make('slug')
                                 ->required()
+                                ->disabled()
                                 ->dehydrated()
-                                ->readOnly()
                                 ->unique(Brand::class, 'slug', ignoreRecord: true)
                                 ->maxLength(255),
                         ]),
@@ -65,6 +66,8 @@ class BrandResource extends Resource
     {
         return $table
             ->columns([
+                TextColumn::make('id')
+                ->rowIndex(),
                 TextColumn::make('name')
                     ->searchable(),
                 ImageColumn::make('image'),
@@ -72,12 +75,13 @@ class BrandResource extends Resource
                     ->searchable(),
                 IconColumn::make('is_active')
                     ->boolean(),
+
                 TextColumn::make('created_at')
-                    ->dateTime()
+                    ->dateTime('d M Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
                 TextColumn::make('updated_at')
-                    ->dateTime()
+                    ->dateTime('d M Y H:i:s')
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
@@ -86,8 +90,8 @@ class BrandResource extends Resource
             ])
             ->actions([
                 ActionGroup::make([
-                    EditAction::make(),
                     ViewAction::make(),
+                    EditAction::make(),
                     DeleteAction::make(),
                 ]),
             ])

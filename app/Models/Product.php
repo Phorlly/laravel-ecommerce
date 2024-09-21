@@ -29,7 +29,7 @@ class Product extends Model
         'images',
         'description',
         'price',
-        'is_active',
+        'is_activie',
         'is_featured',
         'in_stock',
         'on_sale',
