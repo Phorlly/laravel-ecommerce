@@ -85,10 +85,11 @@
                         <span class="font-semibold">{{ Number::currency($grandTotal) }}</span>
                     </div>
                     @if ($items)
-                        <button class="flex items-center bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">
+                        <a href="{{ route('checkout') }}" wire:navigate
+                            class="flex items-center bg-blue-500 text-white py-2 px-4 rounded-lg mt-4 w-full">
                             <x-fas-check-to-slot class="w-5 h-5 mx-4" />
                             {{ __('Checkout') }}
-                        </button>
+                        </a>
                     @endif
                 </div>
             </div>

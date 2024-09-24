@@ -2,21 +2,20 @@
 
 namespace App\Livewire\Pages;
 
-use App\Http\Helpers\CartManagement;
-use App\Livewire\Partials\Navbar;
 use App\Models\Brand;
-use App\Models\Category;
-use App\Models\Product as Model;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
-use Livewire\Attributes\Title;
-use Livewire\Attributes\Url;
 use Livewire\Component;
+use App\Models\Category;
+use Livewire\Attributes\Url;
 use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use App\Models\Product as Model;
+use App\Livewire\Partials\Navbar;
+use App\Http\Helpers\CartManagement;
 
+#[Title('Product')]
 class Product extends Component
 {
     use WithPagination;
-    use LivewireAlert;
 
     #[Url]
     public $selectedCategories = [],
@@ -35,7 +34,6 @@ class Product extends Component
         $this->alert(message: 'Added product to cart!', options: ['position' => 'top-start']);
     }
 
-    #[Title('Product')]
     public function render()
     {
         $brands = Brand::where('is_active', 1)->get(['id', 'name', 'slug']);

@@ -5,13 +5,12 @@ namespace App\Livewire\Pages;
 use App\Http\Helpers\CartManagement;
 use App\Livewire\Partials\Navbar;
 use App\Models\Product;
-use Jantinnerezo\LivewireAlert\LivewireAlert;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Product Detail')]
 class ProductDetail extends Component
 {
-    use LivewireAlert;
 
     public $slug = '',
         $quantity = 1;
@@ -42,7 +41,6 @@ class ProductDetail extends Component
         $this->alert(message: 'Added product to cart!', options: ['position' => 'top-start']);
     }
 
-    #[Title('Product Detail')]
     public function render()
     {
         return view('livewire.pages.product-detail', [

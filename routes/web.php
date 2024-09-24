@@ -28,17 +28,20 @@ Route::get('/products', Product::class)->name('product');
 Route::get('/products/{slug}', ProductDetail::class)->name('product.detail');
 Route::get('/cart', Cart::class)->name('cart');
 
-Route::get('/checkout', Checkout::class)->name('checkout');
-Route::get('/my-orders', MyOrder::class)->name('order');
-Route::get('/my-orders/{order}', OrderDetail::class)->name('order.detail');
+//For routes guest
+Route::middleware('guest')->group(function () {
+    Route::get('/login', Login::class)->name('login');
+    Route::get('/logup', Logup::class)->name('logup');
+    Route::get('/forgot', ForgotPassword::class)->name('password.request');
+    Route::get('/reset/{token}', ResetPassword::class)->name('password.reset');
+});
 
 //For routes authorization
-Route::get('/login', Login::class)->name('login');
-Route::get('/logup', Logup::class)->name('logup');
-Route::get('/forgot-password', ForgotPassword::class)->name('forgot');
-Route::get('/reset-password', ResetPassword::class)->name('reset');
+Route::middleware('auth')->group(function () {
+    Route::get('/checkout', Checkout::class)->name('checkout');
+    Route::get('/my-orders', MyOrder::class)->name('order');
+    Route::get('/my-orders/{order_id}', OrderDetail::class)->name('order.detail');
 
-
-Route::get('/cancel', Cancel::class)->name('cancel');
-Route::get('/success', Success::class)->name('success');
-
+    Route::get('/success', Success::class)->name('success');
+    Route::get('/cancel', Cancel::class)->name('cancel');
+});

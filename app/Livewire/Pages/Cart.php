@@ -7,6 +7,7 @@ use App\Livewire\Partials\Navbar;
 use Livewire\Attributes\Title;
 use Livewire\Component;
 
+#[Title('Cart')]
 class Cart extends Component
 {
     public $items = [],
@@ -37,7 +38,6 @@ class Cart extends Component
         $this->grandTotal = CartManagement::calculateGrandTotal($this->items);
     }
 
-    #[Title('Cart')]
     public function render()
     {
         return view('livewire.pages.cart');

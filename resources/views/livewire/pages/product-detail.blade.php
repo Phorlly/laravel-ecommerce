@@ -81,7 +81,7 @@
                                 <span wire:loading.remove wire:target='addToCart({{ $model->id }})'>
                                     Add to cart
                                 </span>
-                                <span wire:loading wire:target='addToCart({{ $model->id }})'>Adding...</span>
+                                <span wire:loading wire:target='addToCart({{ $model->id }})'>Processing...</span>
                             </button>
                         </div>
                     </div>

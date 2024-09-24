@@ -2,14 +2,21 @@
 
 namespace App\Livewire\Pages;
 
-use Livewire\Attributes\Title;
+use App\Models\Order;
 use Livewire\Component;
+use Livewire\WithPagination;
+use Livewire\Attributes\Title;
+use Illuminate\Support\Facades\Auth;
 
+#[Title('My Order')]
 class MyOrder extends Component
 {
-    #[Title('My Order')]
+    use WithPagination;
+
     public function render()
     {
-        return view('livewire.pages.my-order');
+        $models = Order::where('user_id', Auth::id())->latest()->paginate(10);
+
+        return view('livewire.pages.my-order', compact('models'));
     }
 }

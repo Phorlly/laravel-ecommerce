@@ -25,7 +25,7 @@
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
-                        <div>Jace Grimes</div>
+                        <div>{{ __($address->full_name) }}</div>
                     </div>
                 </div>
             </div>
@@ -56,7 +56,7 @@
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
                         <h3 class="text-xl font-medium text-gray-800 dark:text-gray-200">
-                            17-02-2024
+                            {{ __($items[0]->created_at->format('d M Y')) }}
                         </h3>
                     </div>
                 </div>
@@ -85,7 +85,9 @@
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
-                        <span class="bg-yellow-500 py-1 px-3 rounded text-white shadow">Processing</span>
+                        <span class="{{ statusColor($order->status) }} py-1 px-3 rounded text-white shadow">
+                            {{ __(status($order->status)) }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -115,7 +117,10 @@
                         </p>
                     </div>
                     <div class="mt-1 flex items-center gap-x-2">
-                        <span class="bg-green-500 py-1 px-3 rounded text-white shadow">Paid</span>
+                        <span
+                            class="{{ paymentStatusColor($order->payment_status) }} py-1 px-3 rounded text-white shadow">
+                            {{ __(paymentStatus($order->payment_status)) }}
+                        </span>
                     </div>
                 </div>
             </div>
@@ -137,39 +142,31 @@
                         </tr>
                     </thead>
                     <tbody>
-
-                        <!--[if BLOCK]><![endif]-->
-                        <tr wire:key="53">
-                            <td class="py-4">
-                                <div class="flex items-center">
-                                    <img class="h-16 w-16 mr-4"
-                                        src="http://localhost:8000/storage/products/01HND3J5XS7ZC5J84BK5YDM6Z2.jpg"
-                                        alt="Product image">
-                                    <span class="font-semibold">Samsung Galaxy Watch6</span>
-                                </div>
-                            </td>
-                            <td class="py-4">₹29,999.00</td>
-                            <td class="py-4">
-                                <span class="text-center w-8">1</span>
-                            </td>
-                            <td class="py-4">₹29,999.00</td>
-                        </tr>
-                        <tr wire:key="54">
-                            <td class="py-4">
-                                <div class="flex items-center">
-                                    <img class="h-16 w-16 mr-4"
-                                        src="http://localhost:8000/storage/products/01HND30J0P7C6MWQ1XQK7YDQKA.jpg"
-                                        alt="Product image">
-                                    <span class="font-semibold">Samsung Galaxy Book3</span>
-                                </div>
-                            </td>
-                            <td class="py-4">₹75,000.00</td>
-                            <td class="py-4">
-                                <span class="text-center w-8">5</span>
-                            </td>
-                            <td class="py-4">₹375,000.00</td>
-                        </tr>
-                        <!--[if ENDBLOCK]><![endif]-->
+                        @foreach ($items as $item)
+                            <tr wire:key="53">
+                                <td class="py-4">
+                                    <div class="flex items-center">
+                                        <img class="h-16 w-16 mr-4 rounded-lg"
+                                            src="{{ asset('storage/' . $item->product->images[0]) }}"
+                                            alt="{{ $item->product->name }}">
+                                        <span class="font-semibold">
+                                            {{ __($item->product->name) }}
+                                        </span>
+                                    </div>
+                                </td>
+                                <td class="py-4">
+                                    {{ __(Number::currency($item->unit_price)) }}
+                                </td>
+                                <td class="py-4">
+                                    <span class="text-center w-8">
+                                        {{ __($item->quantity) }} Unit
+                                    </span>
+                                </td>
+                                <td class="py-4">
+                                    {{ __(Number::currency($item->total_price)) }}
+                                </td>
+                            </tr>
+                        @endforeach
 
                     </tbody>
                 </table>
@@ -179,11 +176,18 @@
                 <h1 class="font-3xl font-bold text-slate-500 mb-3">Shipping Address</h1>
                 <div class="flex justify-between items-center">
                     <div>
-                        <p>42227 Zoila Glens, Oshkosh, Michigan, 55928</p>
+                        <p>
+                            {{ __($address->street) }},
+                            {{ __($address->city) }},
+                            {{ __($address->state) }},
+                            {{ __($address->zip_code) }}
+                        </p>
                     </div>
                     <div>
                         <p class="font-semibold">Phone:</p>
-                        <p>023-509-0009</p>
+                        <p>
+                            {{ __($address->phone_number) }}
+                        </p>
                     </div>
                 </div>
             </div>
@@ -194,22 +198,37 @@
                 <h2 class="text-lg font-semibold mb-4">Summary</h2>
                 <div class="flex justify-between mb-2">
                     <span>Subtotal</span>
-                    <span>₹404,999.00</span>
+                    <span>
+                        {{ __(Number::currency($order->grand_total)) }}
+                    </span>
                 </div>
                 <div class="flex justify-between mb-2">
                     <span>Taxes</span>
-                    <span>₹0.00</span>
+                    <span>
+                        {{ __(Number::currency(0)) }}
+                    </span>
                 </div>
                 <div class="flex justify-between mb-2">
                     <span>Shipping</span>
-                    <span>₹0.00</span>
+                    <span>
+                        {{ __(Number::currency(0)) }}
+                    </span>
                 </div>
                 <hr class="my-2">
                 <div class="flex justify-between mb-2">
                     <span class="font-semibold">Grand Total</span>
-                    <span class="font-semibold">₹404,999.00</span>
+                    <span class="font-semibold">
+                        {{ __(Number::currency($order->grand_total)) }}
+                    </span>
                 </div>
 
+            </div>
+            <div class="mt-6 flex items-center">
+                <a href="{{ route('order') }}" wire:navigate
+                    class="w-full text-center py-3 bg-black text-white rounded-lg hover:bg-blue-950">
+                    <x-fas-circle-arrow-left class="inline-flex mx-2 w-5 h-5" />
+                    {{ __('Go Back') }}
+                </a>
             </div>
         </div>
     </div>

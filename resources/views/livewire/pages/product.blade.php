@@ -125,7 +125,7 @@
                                                 {{ __('Add to Cart') }}
                                             </span>
                                             <span wire:loading
-                                                wire:target='addToCart({{ $item->id }})'>Adding...</span>
+                                                wire:target='addToCart({{ $item->id }})'>Processing...</span>
                                         </button>
 
                                     </div>
